@@ -1,0 +1,905 @@
+openapi: 3.0.3
+info:
+  title: Django DRF IMDB-Clone
+  version: 0.0.0
+paths:
+  /account/api/token/:
+    post:
+      operationId: account_api_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /account/api/token/refresh/:
+    post:
+      operationId: account_api_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /account/register/:
+    post:
+      operationId: account_register_create
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResgistrationSerialzers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResgistrationSerialzers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResgistrationSerialzers'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResgistrationSerialzers'
+          description: ''
+  /api/{id}/review/create/:
+    post:
+      operationId: api_review_create_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewSerializers'
+          description: ''
+  /api/{id}/reviews/:
+    get:
+      operationId: api_reviews_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewSerializers'
+          description: ''
+  /api/review/{id}/:
+    get:
+      operationId: api_review_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewSerializers'
+          description: ''
+    put:
+      operationId: api_review_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewSerializers'
+          description: ''
+    patch:
+      operationId: api_review_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewSerializers'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewSerializers'
+          description: ''
+    delete:
+      operationId: api_review_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - ht
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/stream/:
+    get:
+      operationId: api_stream_list
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StreamPlatformSerializers'
+          description: ''
+    post:
+      operationId: api_stream_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamPlatformSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StreamPlatformSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StreamPlatformSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatformSerializers'
+          description: ''
+  /api/stream/{id}/:
+    get:
+      operationId: api_stream_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatformSerializers'
+          description: ''
+    put:
+      operationId: api_stream_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamPlatformSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StreamPlatformSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StreamPlatformSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatformSerializers'
+          description: ''
+    delete:
+      operationId: api_stream_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/user/{username}/reviews/:
+    get:
+      operationId: api_user_reviews_list
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewSerializers'
+          description: ''
+  /api/watch/:
+    get:
+      operationId: api_watch_list
+      parameters:
+      - name: p
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWatchListSerializersList'
+          description: ''
+    post:
+      operationId: api_watch_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WatchListSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WatchListSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WatchListSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchListSerializers'
+          description: ''
+  /api/watch/{id}/:
+    get:
+      operationId: api_watch_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchListSerializers'
+          description: ''
+    put:
+      operationId: api_watch_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WatchListSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WatchListSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WatchListSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchListSerializers'
+          description: ''
+    patch:
+      operationId: api_watch_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWatchListSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWatchListSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWatchListSerializers'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchListSerializers'
+          description: ''
+    delete:
+      operationId: api_watch_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    PaginatedWatchListSerializersList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?p=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?p=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchListSerializers'
+    PatchedReviewSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        review_user:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+        active:
+          type: boolean
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        watchlist:
+          type: integer
+    PatchedWatchListSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        active:
+          type: boolean
+        avg_rating:
+          type: number
+          format: double
+        number_rating:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        platform:
+          type: integer
+    ResgistrationSerialzers:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - password2
+      - username
+    ReviewSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        review_user:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+        active:
+          type: boolean
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        watchlist:
+          type: integer
+      required:
+      - created
+      - id
+      - rating
+      - review_user
+      - updated
+      - watchlist
+    StreamPlatformSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        watchlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchListSerializers'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        about:
+          type: string
+          maxLength: 255
+        website:
+          type: string
+          format: uri
+          maxLength: 100
+      required:
+      - about
+      - id
+      - name
+      - watchlist
+      - website
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    WatchListSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        active:
+          type: boolean
+        avg_rating:
+          type: number
+          format: double
+        number_rating:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        platform:
+          type: integer
+      required:
+      - created
+      - description
+      - id
+      - platform
+      - title
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import filters
+from drf_spectacular.utils import extend_schema
 
 from watchmate.models import WatchList, StreamPlatform, Review
 from watchmate.api.serializers import StreamPlatformSerializers, WatchListSerializers, ReviewSerializers
@@ -134,12 +135,19 @@ class StreamplatformList(APIView):
 
     permission_classes = [IsAdminOrReadonly]
 
+    @extend_schema(
+        responses=StreamPlatformSerializers(many=True),
+    )
     def get(self, request):
         stream = StreamPlatform.objects.all()
 
         serializers = StreamPlatformSerializers(stream, many=True)
         return Response(serializers.data)
     
+    @extend_schema(
+        request=StreamPlatformSerializers,
+        responses=StreamPlatformSerializers,
+    )
     def post(self, request):
         serializers = StreamPlatformSerializers(data=request.data)
         if serializers.is_valid():
@@ -154,19 +162,29 @@ class StreamplatformDetail(APIView):
 
     permission_classes = [IsAdminOrReadonly]
 
+    @extend_schema(
+        responses=StreamPlatformSerializers,
+    )
     def get_object(self, pk):
         try:
             return StreamPlatform.objects.get(pk=pk)
         except StreamPlatform.DoesNotExist:
             raise Http404
 
+    @extend_schema(
+        responses=StreamPlatformSerializers,
+    )
     def get(self, request, pk):
         
         stream = self.get_object(pk)
 
         serializers = StreamPlatformSerializers(stream)
         return Response(serializers.data)
-        
+
+    @extend_schema(
+        request=StreamPlatformSerializers,
+        responses=StreamPlatformSerializers,
+    )   
     def put(self, request, pk):
         
         stream = self.get_object(pk)
@@ -177,7 +195,8 @@ class StreamplatformDetail(APIView):
             return Response(serializers.data)
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+    @extend_schema(responses={204: None})    
     def delete(self, request, pk):
         
         stream = self.get_object(pk)

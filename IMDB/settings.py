@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'watchmate',
     'rest_framework',
     'UserApp',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -138,10 +139,17 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+# Run this in terminal to create the file - python manage.py spectacular --file schema.yml
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Django DRF IMDB-Clone",
 }

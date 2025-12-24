@@ -1,16 +1,20 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from drf_spectacular.utils import extend_schema
 
 
-from UserApp.api.serializers import ResgistrationSerialzers
+from UserApp.api.serializers import ResgistrationSerializers
 
-
+@extend_schema(
+    request=ResgistrationSerializers,
+    responses=ResgistrationSerializers,
+)
 @api_view(['POST',])
 def resgistration_view(request):
 
     if request.method == 'POST':
-        serializers = ResgistrationSerialzers(data=request.data)
+        serializers = ResgistrationSerializers(data=request.data)
 
         data = {}
 
