@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+# # import dj_database_url
 from pathlib import Path
 
 #For JWT
@@ -82,14 +83,22 @@ WSGI_APPLICATION = 'IMDB.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "newdb",
+        "NAME": "newdb_lraa",
         "USER": "jude",
-        "PASSWORD": "password123@",
-        "HOST": "127.0.0.1",
+        "PASSWORD": "nBGpwGWgFOhvwrNz7IeH3TICMbDFdfDT",
+        "HOST": "dpg-d560cj0gjchc738obrjg-a.oregon-postgres.render.com",
         "PORT": "5432",
     }
 }
 
+#                                OR
+
+# # To use install render database url- pip install dj-database-url
+
+# DATABASES['default'] = dj_database_url.parse("postgresql://jude:nBGpwGWgFOhvwrNz7IeH3TICMbDFdfDT@dpg-d560cj0gjchc738obrjg-a/newdb_lraa")
+
+# # Then install postgres driver - pip install psycopg2-binary
+# # Then makemigrations...
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
