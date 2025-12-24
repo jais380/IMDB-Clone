@@ -167,14 +167,14 @@ Refresh Token
 
 ⭐ Review Endpoints
 
-| Method | Endpoint                         | Description              |
-| ------ | -------------------------------- | ------------------------ |
-| GET    | `/api/<movie_id>/reviews/`       | List reviews for a movie |
-| POST   | `/api/<movie_id>/review/create/` | Create review (auth)     |
-| GET    | `/api/review/<id>/`              | Retrieve review          |
-| PUT    | `/api/review/<id>/`              | Update review (owner)    |
-| DELETE | `/api/review/<id>/`              | Delete review (owner)    |
-| GET    | `/api/<username>/reviews/`       | Reviews by user          |
+| Method | Endpoint                              | Description              |
+| ------ | ------------------------------------- | ------------------------ |
+| GET    | `/api/<movie_id>/reviews/`            | List reviews for a movie |
+| POST   | `/api/<movie_id>/review/create/`      | Create review (auth)     |
+| GET    | `/api/review/<id>/`                   | Retrieve review          |
+| PUT    | `/api/review/<id>/`                   | Update review (owner)    |
+| DELETE | `/api/review/<id>/`                   | Delete review (owner)    |
+| GET    | `/api/user/<username>/reviews/`       | Reviews by user          |
 
 
 # 🧠 Business Rules
