@@ -19,7 +19,7 @@ class UserReview(generics.ListAPIView):
     serializer_class = ReviewSerializers
 
     def get_queryset(self):
-        user = self.kwargs.get('username')
+        user = self.request.query_params.get('username', None)
 
         return Review.objects.filter(review_user__username = user).order_by("-created")
 
@@ -84,7 +84,8 @@ class ReviewdetailAV(generics.RetrieveUpdateDestroyAPIView):
     
     def perform_update(self, serializer):
         pk = self.kwargs['pk']
-        movie = WatchList.objects.get(pk=pk)
+        review = Review.objects.get(pk=pk)
+        movie = review.watchlist
 
         review_user = self.request.user
         review_queryset = Review.objects.filter(watchlist=movie, review_user=review_user)
@@ -152,7 +153,7 @@ class StreamplatformList(APIView):
         serializers = StreamPlatformSerializers(data=request.data)
         if serializers.is_valid():
             serializers.save()
-            return Response(serializers.data)
+            return Response(serializers.data, status.HTTP_201_CREATED)
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
   

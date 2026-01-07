@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 
 
-class ResgistrationSerializers(serializers.ModelSerializer):
+class RegistrationSerializers(serializers.ModelSerializer):
 
     password2 = serializers.CharField(style = {'input_type': 'password'}, write_only = True)
 
@@ -17,10 +17,12 @@ class ResgistrationSerializers(serializers.ModelSerializer):
             }
         }
 
-    def save(self):
+    # Drf best practice is to overide create, not save
+    def create(self, validated_data):
         
-        password = self.validated_data['password']
-        password2 = self.validated_data['password2']
+        # It retrieves and removes key/value pairs in a dict
+        password = validated_data.pop('password')
+        password2 = validated_data.pop('password2')
 
         # Confirm passwords are the same
         if password != password2:
@@ -29,13 +31,17 @@ class ResgistrationSerializers(serializers.ModelSerializer):
             })
         
         # Check if email already exists
-        if User.objects.filter(email=self.validated_data['email']).exists:
+        email = validated_data['email'].lower()
+        if User.objects.filter(email=email).exists():
             raise serializers.ValidationError({
                 "error": "Email already exists"
             })
         
         # To set up the password
-        account = User(email=self.validated_data['email'], username=self.validated_data['username'])
+        # **validated_data only represents username and email 
+        # because password1 and password2 have been removed by pop
+        account = User(**validated_data)
+        # Hashes the password
         account.set_password(password)
         account.save()
 
