@@ -57,6 +57,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenRefresh'
           description: ''
+  /account/logout/:
+    post:
+      operationId: account_logout_create
+      tags:
+      - account
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
   /account/register/:
     post:
       operationId: account_register_create
@@ -66,13 +76,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResgistrationSerialzers'
+              $ref: '#/components/schemas/RegistrationSerializers'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ResgistrationSerialzers'
+              $ref: '#/components/schemas/RegistrationSerializers'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ResgistrationSerialzers'
+              $ref: '#/components/schemas/RegistrationSerializers'
         required: true
       security:
       - jwtAuth: []
@@ -82,7 +92,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResgistrationSerialzers'
+                $ref: '#/components/schemas/RegistrationSerializers'
           description: ''
   /api/{id}/review/create/:
     post:
@@ -488,15 +498,9 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/user/{username}/reviews/:
+  /api/user/reviews/:
     get:
       operationId: api_user_reviews_list
-      parameters:
-      - in: path
-        name: username
-        schema:
-          type: string
-        required: true
       tags:
       - api
       security:
@@ -746,7 +750,7 @@ components:
           readOnly: true
         platform:
           type: integer
-    ResgistrationSerialzers:
+    RegistrationSerializers:
       type: object
       properties:
         username:
