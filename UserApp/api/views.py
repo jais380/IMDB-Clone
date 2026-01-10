@@ -9,7 +9,7 @@ from drf_spectacular.utils import extend_schema
 
 from UserApp.api.serializers import RegistrationSerializers
 
-
+@extend_schema(auth=['jwtAuth'])
 class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -46,7 +46,7 @@ class LogoutAPIView(APIView):
 
 
 
-
+@extend_schema(auth=[])
 class RegistrationAPIView(APIView):
     permission_classes = [AllowAny]
 
