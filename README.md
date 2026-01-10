@@ -5,6 +5,8 @@ It allows users to browse movies, streaming platforms, post reviews, and authent
 
 The API is designed as a backend service that can be consumed by a frontend application (React, mobile app, etc.).
 
+LIVE API DOCS - https://imdb-clone-904k.onrender.com
+
 # 🚀 Features
 🔐 Authentication
 
@@ -53,6 +55,8 @@ The API is designed as a backend service that can be consumed by a frontend appl
 - Update & delete reviews (owner-only)
 
 🔒 Permissions & Safety
+
+- Implemented TDD best practices for endpoints
 
 - Admin-only write access for platforms and movies
 
@@ -142,6 +146,11 @@ Refresh Token
 
 
 `POST /account/api/token/refresh/`
+
+Logout
+
+
+`POST /account/logout/`
 
 # 🎥 Streaming Platform Endpoints
 
