@@ -13,10 +13,9 @@ from watchmate.api.serializers import StreamPlatformSerializers, WatchListSerial
 from watchmate.api.permissions import IsAdminOrReadonly, IsReviewOrReadonly
 from watchmate.api.pagination import WatchListPagination
 
-@extend_schema(auth=[])
+
 class UserReview(generics.ListAPIView):
 
-    permission_classes = [AllowAny]
     serializer_class = ReviewSerializers
 
     def get_queryset(self):
@@ -25,7 +24,7 @@ class UserReview(generics.ListAPIView):
         return Review.objects.filter(review_user__username = user).order_by("-created")
 
 
-@extend_schema(auth=['jwtAuth'])
+
 class ReviewcreateAV(generics.CreateAPIView):
 
     permission_classes = [IsAuthenticated]
@@ -62,7 +61,6 @@ class ReviewcreateAV(generics.CreateAPIView):
         serializer.save(watchlist=movie, review_user=review_user)
 
 
-@extend_schema(auth=[])
 class ReviewlistAV(generics.ListAPIView):
 
     permission_classes = [AllowAny]
@@ -81,11 +79,9 @@ class ReviewdetailAV(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ReviewSerializers
     permission_classes = [IsReviewOrReadonly]
 
-    @extend_schema(auth=[])
     def get_queryset(self):
         return Review.objects.all()
     
-    @extend_schema(auth=['jwtAuth'])
     def perform_update(self, serializer):
         pk = self.kwargs['pk']
         review = Review.objects.get(pk=pk)
@@ -142,7 +138,6 @@ class StreamplatformList(APIView):
 
     @extend_schema(
         responses=StreamPlatformSerializers(many=True),
-        auth=[]
     )
     def get(self, request):
         stream = StreamPlatform.objects.all()
@@ -153,7 +148,6 @@ class StreamplatformList(APIView):
     @extend_schema(
         request=StreamPlatformSerializers,
         responses=StreamPlatformSerializers,
-        auth=['jwtAuth']
     )
     def post(self, request):
         serializers = StreamPlatformSerializers(data=request.data)
@@ -171,7 +165,6 @@ class StreamplatformDetail(APIView):
 
     @extend_schema(
         responses=StreamPlatformSerializers,
-        auth=[]
     )
     def get_object(self, pk):
         try:
@@ -181,7 +174,6 @@ class StreamplatformDetail(APIView):
 
     @extend_schema(
         responses=StreamPlatformSerializers,
-        auth=[]
     )
     def get(self, request, pk):
         
@@ -193,7 +185,6 @@ class StreamplatformDetail(APIView):
     @extend_schema(
         request=StreamPlatformSerializers,
         responses=StreamPlatformSerializers,
-        auth=['jwtAuth']
     )   
     def put(self, request, pk):
         
@@ -206,7 +197,7 @@ class StreamplatformDetail(APIView):
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @extend_schema(responses={204: None}, auth=[])    
+    @extend_schema(responses={204: None})    
     def delete(self, request, pk):
         
         stream = self.get_object(pk)

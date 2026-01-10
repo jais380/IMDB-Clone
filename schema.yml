@@ -63,7 +63,7 @@ paths:
       tags:
       - account
       security:
-      - jwtAuth
+      - jwtAuth: []
       responses:
         '200':
           description: No response body
@@ -84,6 +84,9 @@ paths:
             schema:
               $ref: '#/components/schemas/RegistrationSerializers'
         required: true
+      security:
+      - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -115,7 +118,7 @@ paths:
               $ref: '#/components/schemas/ReviewSerializers'
         required: true
       security:
-      - jwtAuth
+      - jwtAuth: []
       responses:
         '201':
           content:
@@ -134,6 +137,9 @@ paths:
         required: true
       tags:
       - api
+      security:
+      - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -390,6 +396,8 @@ paths:
       operationId: api_stream_list
       tags:
       - api
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -416,7 +424,7 @@ paths:
               $ref: '#/components/schemas/StreamPlatformSerializers'
         required: true
       security:
-      - jwtAuth
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -435,6 +443,8 @@ paths:
         required: true
       tags:
       - api
+      security:
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -465,7 +475,7 @@ paths:
               $ref: '#/components/schemas/StreamPlatformSerializers'
         required: true
       security:
-      - jwtAuth
+      - jwtAuth: []
       responses:
         '200':
           content:
@@ -483,6 +493,8 @@ paths:
         required: true
       tags:
       - api
+      security:
+      - jwtAuth: []
       responses:
         '204':
           description: No response body
@@ -491,6 +503,9 @@ paths:
       operationId: api_user_reviews_list
       tags:
       - api
+      security:
+      - jwtAuth: []
+      - {}
       responses:
         '200':
           content:
